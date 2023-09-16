@@ -1,4 +1,3 @@
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn import preprocessing
@@ -20,21 +19,21 @@ print("\nNumber of samples: "+str(df.shape[0]))
 plt.hist(df['distance_from_home'],8)
 plt.xlabel('distance_from_home')
 plt.ylabel('frequency')
-#plt.show()
+plt.show()
 
 plt.hist(df['distance_from_last_transaction'],8)
 plt.xlabel('distance_from_last_transaction')
 plt.ylabel('frequency')
-#plt.show()
+plt.show()
 
 plt.hist(df['ratio_to_median_purchase_price'],8)
 plt.xlabel('ratio_to_median_purchase_price')
 plt.ylabel('frequency')
-#plt.show()
+plt.show()
 
 #draw boxplots of all features
-#df.boxplot()
-#plt.show()
+df.boxplot()
+plt.show()
 
 
 
@@ -75,7 +74,7 @@ X2 =df[['repeat_retailer','used_chip','used_pin_number','online_order']]
 X = pd.concat([X, X2], axis=1)
 y = df['fraud']
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
 
 knn = KNeighborsClassifier(n_neighbors=5)
 knn.fit(X_train, y_train)
@@ -92,4 +91,4 @@ gnb.fit(X_train, y_train)
 y_pred = gnb.predict(X_test)
 print("Accuracy: "+str(accuracy_score(y_test, y_pred)))
 
-#7. Apply the k-nearest neighbor model and naïve bayes model to classify a new example.
+#7. Apply the k-nearest neighbor model and naïve bayes model to classify a new example. Allready done in 5 and 6.
