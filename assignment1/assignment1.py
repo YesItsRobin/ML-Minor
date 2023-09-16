@@ -1,3 +1,8 @@
+'''
+Code by Robin Tollenaar and Finn Thomas
+16/09/2023
+'''
+
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn import preprocessing
