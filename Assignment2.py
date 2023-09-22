@@ -1,7 +1,8 @@
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
+from sklearn.svm import SVC
 from sklearn import preprocessing
+from sklearn.naive_bayes import GaussianNB
 
 df = pd.read_csv('card_transdata.csv', header = 0)
 
@@ -59,7 +60,6 @@ print("Confusion Matrix (log data):")
 print(confusion)
 
 ######### Training and testing Naive Bayes #########
-from sklearn.naive_bayes import GaussianNB
 
 X = df_scaled
 X2 = df[['repeat_retailer', 'used_chip', 'used_pin_number', 'online_order']]
@@ -79,6 +79,8 @@ print("Accuracy (scaled):", accuracy)
 print("Confusion Matrix (scaled):")
 print(confusion)
 
+#Test with log transformed data
+
 X = df_log_transformed
 X2 = df[['repeat_retailer', 'used_chip', 'used_pin_number', 'online_order']]
 X = pd.concat([X, X2], axis=1)
@@ -93,6 +95,54 @@ y_pred = gnb.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
 confusion = confusion_matrix(y_test, y_pred)
 print("Naive Bayes:")
+print("Accuracy (log):", accuracy)
+print("Confusion Matrix (log):")
+print(confusion)
+
+######### Training and testing SVC #########
+
+X = df_scaled
+X2 = df[['repeat_retailer', 'used_chip', 'used_pin_number', 'online_order']]
+X = pd.concat([X, X2], axis=1)
+
+X = X.sample(frac=0.5) #using half of the dataset due to processing time
+y = df['fraud'].iloc[X.index]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+svm = SVC(kernel='rbf')
+svm.fit(X_train, y_train)
+
+y_pred = svm.predict(X_test)
+
+accuracy = accuracy_score(y_test, y_pred)
+confusion = confusion_matrix(y_test, y_pred)
+
+print ("SVC")
+print("Accuracy (scaled):", accuracy)
+print("Confusion Matrix (scaled):")
+print(confusion)
+#
+# #Test with log transformed data
+
+X = df_log_transformed
+X2 = df[['repeat_retailer', 'used_chip', 'used_pin_number', 'online_order']]
+X = pd.concat([X, X2], axis=1)
+
+X = X.sample(frac=0.5) #using half of the dataset due to processing time
+y = df['fraud'].iloc[X.index]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+svm = SVC(kernel='rbf')
+svm.fit(X_train, y_train)
+
+y_pred = svm.predict(X_test)
+
+accuracy = accuracy_score(y_test, y_pred)
+confusion = confusion_matrix(y_test, y_pred)
+
+print ("SVC")
 print("Accuracy (log):", accuracy)
 print("Confusion Matrix (log):")
 print(confusion)
