@@ -146,3 +146,96 @@ print ("SVC")
 print("Accuracy (log):", accuracy)
 print("Confusion Matrix (log):")
 print(confusion)
+
+######### Training and testing Decision Tree #########
+
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, confusion_matrix
+
+X = df_scaled
+X2 = df[['repeat_retailer', 'used_chip', 'used_pin_number', 'online_order']]
+X = pd.concat([X, X2], axis=1)
+y = df['fraud']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+dt = DecisionTreeClassifier()
+dt.fit(X_train, y_train)
+
+y_pred = dt.predict(X_test)
+
+accuracy = accuracy_score(y_test, y_pred)
+confusion = confusion_matrix(y_test, y_pred)
+
+print ("Decision Tree")
+print("Accuracy (scaled):", accuracy)
+print("Confusion Matrix (scaled):")
+print(confusion)
+
+#Test with log transformed data
+
+X = df_log_transformed
+X2 = df[['repeat_retailer', 'used_chip', 'used_pin_number', 'online_order']]
+X = pd.concat([X, X2], axis=1)
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+dt = DecisionTreeClassifier()
+dt.fit(X_train, y_train)
+
+y_pred = dt.predict(X_test)
+
+accuracy = accuracy_score(y_test, y_pred)
+confusion = confusion_matrix(y_test, y_pred)
+
+print ("Decision Tree")
+print("Accuracy (log):", accuracy)
+print("Confusion Matrix (log):")
+print(confusion)
+
+######### Training and testing Random Forest #########
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, confusion_matrix
+
+X = df_scaled
+X2 = df[['repeat_retailer', 'used_chip', 'used_pin_number', 'online_order']]
+X = pd.concat([X, X2], axis=1)
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+rf = RandomForestClassifier()
+rf.fit(X_train, y_train)
+
+y_pred = rf.predict(X_test)
+
+accuracy = accuracy_score(y_test, y_pred)
+confusion = confusion_matrix(y_test, y_pred)
+
+print ("Random Forest")
+print("Accuracy (scaled):", accuracy)
+print("Confusion Matrix (scaled):")
+print(confusion)
+
+#Test with log transformed data
+
+X = df_log_transformed
+X2 = df[['repeat_retailer', 'used_chip', 'used_pin_number', 'online_order']]
+X = pd.concat([X, X2], axis=1)
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+rf = RandomForestClassifier()
+rf.fit(X_train, y_train)
+
+y_pred = rf.predict(X_test)
+
+accuracy = accuracy_score(y_test, y_pred)
+confusion = confusion_matrix(y_test, y_pred)
+
+print ("Random Forest")
+print("Accuracy (log):", accuracy)
+print("Confusion Matrix (log):")
+print(confusion)
