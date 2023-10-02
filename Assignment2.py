@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.svm import SVC
 from sklearn import preprocessing
 from sklearn.naive_bayes import GaussianNB
-
+from sklearn.experimental import enable_halving_search_cv as HalvingGridSearchCV
 df = pd.read_csv('card_transdata.csv', header = 0)
 
 # Preprocessing scaled data
@@ -110,7 +110,25 @@ y = df['fraud'].iloc[X.index]
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-svm = SVC(kernel='rbf')
+#Hyperparameter tuning gamma: float | Literal['scale', 'auto'] = "scale",
+from sklearn.model_selection import HalvingGridSearchCV 
+svm = SVC()
+param_grid = {'gamma': np.arange(1, 10, 2)}
+
+svm_gscv = HalvingGridSearchCV(svm, param_grid, cv=5)
+svm_gscv.fit(X_train, y_train)
+print("Best parameters:", svm_gscv.best_params_)
+print("Best score:", svm_gscv.best_score_)
+print("Best estimator:", svm_gscv.best_estimator_)
+print("Best index:", svm_gscv.best_index_)
+print("Scorer function:", svm_gscv.scorer_)
+print("CV results:", svm_gscv.cv_results_)
+print("Refit time:", svm_gscv.refit_time_)
+print("Predictions:", svm_gscv.predict(X_test))
+print("Score:", svm_gscv.score(X_test, y_test))
+
+#Using best parameters from GridSearchCV
+svm = SVC(kernel=svm_gscv.best_params_['kernel'])
 svm.fit(X_train, y_train)
 
 y_pred = svm.predict(X_test)
