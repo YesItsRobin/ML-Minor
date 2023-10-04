@@ -3,6 +3,8 @@ import numpy as np
 from sklearn.svm import SVC
 from sklearn import preprocessing
 from sklearn.naive_bayes import GaussianNB
+np.random.seed(1)
+
 df = pd.read_csv('card_transdata.csv', header = 0)
 
 # Preprocessing scaled data
@@ -22,10 +24,10 @@ X = df_scaled
 X2 = df[['repeat_retailer', 'used_chip', 'used_pin_number', 'online_order']]
 X = pd.concat([X, X2], axis=1)
 
-X = X.sample(frac=0.05) #using fraction of the dataset due to processing time
+X = X.sample(frac=0.05, random_state=1) #using fraction of the dataset due to processing time
 y = df['fraud'].iloc[X.index]
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1)
 
 # Hyperparameter tuning
 k_range = np.arange(1, 20)
