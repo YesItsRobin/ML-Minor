@@ -14,7 +14,7 @@ df_scaled = pd.DataFrame(df_scaled, columns=df.columns[0:3])
 # K-means clustering on scaled data
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
-'''
+
 # Initialize an empty list to store the within-cluster sum of squares (inertia)
 inertia = []
 
@@ -38,8 +38,6 @@ plt.grid(True)
 plt.show()
 
 #Best was 10 clusters
-
-'''
 # K-means clustering on scaled data
 kmeans = KMeans(n_clusters=10, random_state=42)
 df_scaled['cluster'] = kmeans.fit_predict(df_scaled)
@@ -87,9 +85,12 @@ plt.title('GMM Log-likelihood vs. k')
 plt.grid(True)
 plt.show()
 
-#Best was 6 clusters
+from sklearn.mixture import GaussianMixture
+
+#Best was 6  clusters
 gmm = GaussianMixture(n_components=6, random_state=42)
 gmm.fit(df_scaled)
+
 # show cluster profiles and size
 df_scaled['cluster'] = gmm.predict(df_scaled)
 cluster_profiles = df_scaled.groupby(by='cluster')[['distance_from_home', 'distance_from_last_transaction', 'ratio_to_median_purchase_price']].mean()
@@ -101,4 +102,11 @@ plt.xlabel('Cluster')
 plt.ylabel('Mean Value')
 plt.xticks(rotation=0)
 plt.show()
-'''
+
+# Count the number of fraud datapoints in each cluster
+fraud_counts = df['fraud'][df_scaled.index].groupby(df_scaled['cluster']).sum()
+print(fraud_counts.values)
+
+# show fraud rate
+fraud_rate = fraud_counts / cluster_count
+print(fraud_rate.values)
