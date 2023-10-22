@@ -39,23 +39,29 @@ plt.show()
 
 #Best was 10 clusters
 
-
+'''
 # K-means clustering on scaled data
 kmeans = KMeans(n_clusters=10, random_state=42)
 df_scaled['cluster'] = kmeans.fit_predict(df_scaled)
 
 df_filtered = df_scaled[df_scaled['cluster'] != 5]
 
+# Count the number of fraud datapoints in each cluster
+fraud_counts = df['fraud'][df_filtered.index].groupby(df_filtered['cluster']).sum()
+
 cluster_profiles = df_filtered.groupby(by='cluster')[['distance_from_home', 'distance_from_last_transaction', 'ratio_to_median_purchase_price']].mean()
+cluster_counts = df_filtered['cluster'].value_counts().sort_index()
+
 cluster_profiles.plot(kind='bar', figsize=(10, 6))
-cluster_count = df_filtered['cluster'].value_counts()
-print(cluster_count)
+
+print(cluster_counts)
+#print(fraud_counts)
 plt.title('Cluster Profiles')
 plt.xlabel('Cluster')
 plt.ylabel('Mean Value')
 plt.xticks(rotation=0)
 plt.show()
-'''
+
 # Expectation Maximization Algorithm
 from sklearn.mixture import GaussianMixture
 
@@ -80,7 +86,7 @@ plt.ylabel('Log-likelihood')
 plt.title('GMM Log-likelihood vs. k')
 plt.grid(True)
 plt.show()
-'''
+
 #Best was 6 clusters
 gmm = GaussianMixture(n_components=6, random_state=42)
 gmm.fit(df_scaled)
@@ -95,3 +101,5 @@ plt.xlabel('Cluster')
 plt.ylabel('Mean Value')
 plt.xticks(rotation=0)
 plt.show()
+
+'''
