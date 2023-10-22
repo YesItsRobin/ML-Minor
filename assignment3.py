@@ -67,9 +67,9 @@ from sklearn.mixture import GaussianMixture
 
 # Initialize an empty list to store the log-likelihood scores
 log_likelihoods = []
-'''
+
 # Define the range of clusters you want to try
-num_clusters = range(1, 11)  # You can adjust this range as needed
+num_clusters = range(1, 21)  # You can adjust this range as needed
 
 # Fit Gaussian Mixture Model clustering for each value of k
 for k in num_clusters:
@@ -101,5 +101,4 @@ plt.xlabel('Cluster')
 plt.ylabel('Mean Value')
 plt.xticks(rotation=0)
 plt.show()
-
 '''
